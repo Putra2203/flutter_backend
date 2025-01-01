@@ -10,7 +10,7 @@ app.use(bodyParser.json());
 app.use('/auth', authRoutes);
 
 // Start server
-const PORT = 3000;
+const PORT = 8080;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
