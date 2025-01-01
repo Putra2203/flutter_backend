@@ -13,6 +13,8 @@ app.use(cors({
 }));
 app.use(bodyParser.json());
 
+app.options('*', cors());
+
 app.use('/auth', authRoutes);
 
 const PORT = process.env.PORT || 8080;
