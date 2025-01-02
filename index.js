@@ -15,6 +15,8 @@ app.use(cors({
 // Middleware untuk body parsing JSON
 app.use(bodyParser.json());
 
+app.options('*', cors());
+
 // Menambahkan route untuk auth
 app.use('/auth', authRoutes);
 
