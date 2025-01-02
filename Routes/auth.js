@@ -6,7 +6,7 @@ const db = require("../db");
 require("dotenv").config();
 
 const router = express.Router();
-const SECRET_KEY = process.env.SECRET_KEY || "your_secret_key" ;
+const SECRET_KEY = process.env.SECRET_KEY || "your_secret_key";
 const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const client = new OAuth2Client(CLIENT_ID);
 
@@ -60,7 +60,7 @@ router.post("/login", (req, res) => {
     if (!passwordMatch) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
-    
+
     const token = jwt.sign({ id: user.id, email: user.email }, SECRET_KEY, {
       expiresIn: "1h",
     });
@@ -99,13 +99,13 @@ router.post("/google-login", async (req, res) => {
         return res.status(200).json({
           message: "Login successful",
           token: jwtToken,
-          user: { id: user.id, username: user.username, email: user.email },
+          user: { username: user.username, email: user.email },
         });
       } else {
         // User belum ada, buat user baru di database
         const insertQuery =
-          "INSERT INTO users (google_id, email, username) VALUES (?, ?, ?)";
-        db.query(insertQuery, [sub, email, name], (err, result) => {
+          "INSERT INTO users (google_id, email, username, password) VALUES (?, ?, ?, ?)";
+        db.query(insertQuery, [sub, email, name, null], (err, result) => {
           if (err) {
             return res
               .status(500)
