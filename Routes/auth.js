@@ -6,7 +6,7 @@ const db = require("../db");
 require("dotenv").config();
 
 const router = express.Router();
-const SECRET_KEY = process.env.SECRET_KEY;
+const SECRET_KEY = process.env.SECRET_KEY || "your_secret_key" ;
 const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const client = new OAuth2Client(CLIENT_ID);
 
