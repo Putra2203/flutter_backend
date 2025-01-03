@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const authRoutes = require('./Routes/auth');
+const productsRouter = require("./Routes/products");
 require('dotenv').config();
 const cors = require('cors');
 
@@ -12,13 +13,12 @@ app.use(cors({
     allowedHeaders: ['Content-Type', 'Authorization'], 
 }));
 
-// Middleware untuk body parsing JSON
 app.use(bodyParser.json());
 
 app.options('*', cors());
 
-// Menambahkan route untuk auth
 app.use('/auth', authRoutes);
+app.use("/api", productsRouter);
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
