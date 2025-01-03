@@ -1,11 +1,25 @@
 const express = require("express");
+const multer = require("multer");
 const db = require("../db");
 const router = express.Router();
+
+// Konfigurasi storage untuk gambar
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/');
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, uniqueSuffix + '-' + file.originalname);
+  }
+});
+
+const upload = multer({ storage: storage });
 
 // GET /products - Mengambil semua produk
 router.get("/products", (req, res) => {
   const query = "SELECT * FROM products";
-  db.query(query, (err, results) => {
+  db.query(query, (err, results) => { 
     if (err) {
       return res.status(500).json({ message: "Database error", error: err });
     }
@@ -13,11 +27,13 @@ router.get("/products", (req, res) => {
   });
 });
 
-// POST /products - Menambahkan produk baru
-router.post("/products", (req, res) => {
-  const { name, price, image } = req.body;
+// POST /products - Menambahkan produk baru dengan upload gambar
+router.post("/products", upload.single('image'), (req, res) => {
+  const { name, price } = req.body;
+  const imagePath = req.file ? req.file.path : null;
+
   const query = "INSERT INTO products (name, price, image) VALUES (?, ?, ?)";
-  db.query(query, [name, price, image], (err, result) => {
+  db.query(query, [name, price, imagePath], (err, result) => {
     if (err) {
       return res.status(500).json({ message: "Database error", error: err });
     }
@@ -38,12 +54,13 @@ router.get("/products/:id", (req, res) => {
 });
 
 // PUT /products/:id - Mengupdate produk berdasarkan ID
-router.put("/products/:id", (req, res) => {
+router.put("/products/:id", upload.single('image'), (req, res) => {
   const productId = req.params.id;
-  const { name, price, image } = req.body;
-  const query =
-    "UPDATE products SET name = ?, price = ?, image = ? WHERE id = ?";
-  db.query(query, [name, price, image, productId], (err, result) => {
+  const { name, price } = req.body;
+  const imagePath = req.file ? req.file.path : null;
+
+  const query = "UPDATE products SET name = ?, price = ?, image = ? WHERE id = ?";
+  db.query(query, [name, price, imagePath, productId], (err, result) => {
     if (err) {
       return res.status(500).json({ message: "Database error", error: err });
     }
