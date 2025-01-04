@@ -20,6 +20,7 @@ app.use(
     maxAge: 86400,
   })
 );
+app.options('*', cors());    
 
 app.use((req, res, next) => {
   res.header("X-Content-Type-Options", "nosniff");
