@@ -7,7 +7,7 @@ const cors = require("cors");
 
 const app = express();
 const corsOrigin = {
-  origin: "http://localhost:5173", //or whatever port your frontend is using
+  origin: "*",
   credentials: true,
   optionSuccessStatus: 200,
 };
