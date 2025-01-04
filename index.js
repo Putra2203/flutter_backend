@@ -13,28 +13,14 @@ const app = express();
 // Konfigurasi CORS
 app.use(
   cors({
-    origin: "*", // Sesuaikan dengan URL frontend Anda
+    origin: "http://localhost:5173",
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
   })
 );
 
-app.options("*", cors()); // Tangani preflight OPTIONS request
-
-app.use((req, res, next) => {
-  if (req.method === "OPTIONS") {
-    res.header("Access-Control-Allow-Origin", "*"); // Sesuaikan dengan URL frontend Anda
-    res.header(
-      "Access-Control-Allow-Methods",
-      "GET, POST, PUT, DELETE, OPTIONS"
-    );
-    res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-    res.header("Access-Control-Allow-Credentials", "true");
-    return res.sendStatus(200); // Jangan redirect untuk preflight
-  }
-  next();
-});
+app.options("*", cors());
 
 // Middleware untuk parsing JSON
 app.use(bodyParser.json({ limit: "50mb" }));
