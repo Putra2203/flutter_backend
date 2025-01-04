@@ -1,26 +1,23 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const authRoutes = require('./Routes/auth');
+const express = require("express");
+const bodyParser = require("body-parser");
+const authRoutes = require("./Routes/auth");
 const productsRouter = require("./Routes/products");
-require('dotenv').config();
-const cors = require('cors');
+require("dotenv").config();
+const cors = require("cors");
 
 const app = express();
-
-app.use(cors({
-    origin: '*', 
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization'], 
-}));
+const corsOrigin = {
+  origin: "http://localhost:5173", //or whatever port your frontend is using
+  credentials: true,
+  optionSuccessStatus: 200,
+};
+app.use(cors(corsOrigin));
 
 app.use(bodyParser.json());
-
-app.options('*', cors());
-
-app.use('/auth', authRoutes);
+app.use("/auth", authRoutes);
 app.use("/api", productsRouter);
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
