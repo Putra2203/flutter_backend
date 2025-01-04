@@ -22,6 +22,20 @@ app.use(
 
 app.options("*", cors()); // Tangani preflight OPTIONS request
 
+app.use((req, res, next) => {
+  if (req.method === "OPTIONS") {
+    res.header("Access-Control-Allow-Origin", "*"); // Sesuaikan dengan URL frontend Anda
+    res.header(
+      "Access-Control-Allow-Methods",
+      "GET, POST, PUT, DELETE, OPTIONS"
+    );
+    res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    res.header("Access-Control-Allow-Credentials", "true");
+    return res.sendStatus(200); // Jangan redirect untuk preflight
+  }
+  next();
+});
+
 // Middleware untuk parsing JSON
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }));
