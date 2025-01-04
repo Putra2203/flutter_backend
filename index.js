@@ -1,7 +1,8 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const authRoutes = require("./Routes/auth");
-const productsRouter = require("./Routes/products");
+const authRoutes = require("./Routes/auth"); // Rute untuk login/register
+const productsRouter = require("./Routes/products"); // Rute produk
+const authenticateToken = require("./middlewares/auth"); // Middleware autentikasi
 require("dotenv").config();
 const cors = require("cors");
 const multer = require("multer");
@@ -9,17 +10,17 @@ const path = require("path");
 
 const app = express();
 
-// Pengaturan CORS lebih spesifik untuk produk yang lebih aman
+// Konfigurasi CORS
 app.use(
   cors({
-    origin: "*", // Sesuaikan dengan URL frontend
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    origin: "*", // Sesuaikan dengan URL frontend Anda
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: true, // Menambahkan opsi ini jika kamu mengirimkan cookies atau header Authorization
+    credentials: true,
   })
 );
 
-app.options("*", cors()); // Menangani preflight request untuk semua routes
+app.options("*", cors()); // Tangani preflight OPTIONS request
 
 // Middleware untuk parsing JSON
 app.use(bodyParser.json({ limit: "50mb" }));
@@ -39,11 +40,13 @@ app.use((err, req, res, next) => {
 // Menyajikan file statis
 app.use("/uploads", express.static(path.join(__dirname, "public/uploads")));
 
-// Menggunakan routes
+// Rute Public: Login dan Register (tidak memerlukan autentikasi)
 app.use("/auth", authRoutes);
-app.use("/api", productsRouter);
 
-// Menjalankan server pada port yang diinginkan
+// Rute Proteksi: Produk (memerlukan autentikasi)
+app.use("/api", authenticateToken, productsRouter); // Middleware diterapkan pada semua rute di /api
+
+// Menjalankan server
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
