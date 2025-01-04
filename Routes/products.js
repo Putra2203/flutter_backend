@@ -33,7 +33,7 @@ router.post("/products", upload.single('image'), (req, res) => {
   const imagePath = req.file ? req.file.path : null;
 
   const query = "INSERT INTO products (name, price, image) VALUES (?, ?, ?)";
-  db.query(query, [name, price, imagePath], (err, result) => {
+  db.query(query, [name, price, image], (err, result) => {
     if (err) {
       return res.status(500).json({ message: "Database error", error: err });
     }
@@ -60,7 +60,7 @@ router.put("/products/:id", upload.single('image'), (req, res) => {
   const imagePath = req.file ? req.file.path : null;
 
   const query = "UPDATE products SET name = ?, price = ?, image = ? WHERE id = ?";
-  db.query(query, [name, price, imagePath, productId], (err, result) => {
+  db.query(query, [name, price, image, productId], (err, result) => {
     if (err) {
       return res.status(500).json({ message: "Database error", error: err });
     }
