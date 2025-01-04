@@ -30,7 +30,7 @@ router.get("/products", (req, res) => {
 // POST /products - Menambahkan produk baru dengan upload gambar
 router.post("/products", upload.single('image'), (req, res) => {
   const { name, price } = req.body;
-  const imagePath = req.file ? req.file.path : null;
+  const image = req.file ? req.file.path : null;
 
   const query = "INSERT INTO products (name, price, image) VALUES (?, ?, ?)";
   db.query(query, [name, price, image], (err, result) => {
@@ -57,7 +57,7 @@ router.get("/products/:id", (req, res) => {
 router.put("/products/:id", upload.single('image'), (req, res) => {
   const productId = req.params.id;
   const { name, price } = req.body;
-  const imagePath = req.file ? req.file.path : null;
+  const image = req.file ? req.file.path : null;
 
   const query = "UPDATE products SET name = ?, price = ?, image = ? WHERE id = ?";
   db.query(query, [name, price, image, productId], (err, result) => {
