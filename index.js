@@ -4,7 +4,6 @@ const authRoutes = require("./Routes/auth");
 const productsRouter = require("./Routes/products");
 require("dotenv").config();
 const cors = require("cors");
-const path = require("path");
 
 const app = express();
 const corsOrigin = {
@@ -15,7 +14,6 @@ const corsOrigin = {
 app.use(cors(corsOrigin));
 
 app.use(bodyParser.json());
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use("/auth", authRoutes);
 app.use("/api", productsRouter);
 
