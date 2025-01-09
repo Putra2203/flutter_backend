@@ -29,16 +29,24 @@ router.post("/login", (req, res) => {
     if (err || results.length === 0) {
       return res.status(404).json({ message: "User not found" });
     }
+
     const user = results[0];
     const passwordMatch = await bcrypt.compare(password, user.password);
     if (!passwordMatch) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
+
     // Generate token
     const token = jwt.sign({ id: user.id, email: user.email }, SECRET_KEY, {
       expiresIn: "1h",
     });
-    res.status(200).json({ message: "Login successful", token });
+
+    // Return both token and userId
+    res.status(200).json({
+      message: "Login successful",
+      token: token,
+      userId: user.id, 
+    });
   });
 });
 

@@ -47,7 +47,7 @@ router.post("/orders", async (req, res) => {
     ]);
     await db.promise().query(queryOrderItems, [orderItems]);
 
-    res.status(201).json({ message: "Order created", orderId, shippingCost });
+    res.status(201).json({ message: "Order created", orderId, shippingCost, totalAmount, userId });
   } catch (err) {
     res
       .status(500)
