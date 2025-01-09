@@ -4,8 +4,8 @@ const router = express.Router();
 // Midtrans Configuration
 const midtrans = new midtransClient.Snap({
   isProduction: false, // Ubah ke `true` untuk production
-  serverKey: "Mid-client-kHzKRdVoPfK_4uEH",
-  clientKey: "Mid-server-sFafZpP7gK0xnPk69PaRUgzS",
+  serverKey: process.env.MIDTRANS_SERVER_KEY,
+  clientKey: process.env.MIDTRANS_CLIENT_KEY,
 });
 
 router.post("/orders", async (req, res) => {
