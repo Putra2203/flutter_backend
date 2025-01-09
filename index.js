@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const authRoutes = require("./Routes/auth");
 const productsRouter = require("./Routes/products");
+const paymentsRouter = require("./Routes/payments");
 require("dotenv").config();
 const cors = require("cors");
 const path = require("path");
@@ -18,6 +19,7 @@ app.use(bodyParser.json());
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use("/auth", authRoutes);
 app.use("/api", productsRouter);
+app.use("/pay", paymentsRouter);
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {

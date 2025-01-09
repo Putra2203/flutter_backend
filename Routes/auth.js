@@ -8,7 +8,6 @@ const authMiddleware = require("../middlewares/authmiddleware");
 const router = express.Router();
 const SECRET_KEY = process.env.SECRET_KEY || "your_secret_key";
 
-// Register - Pendaftaran User dengan Email dan Password
 router.post("/register", async (req, res) => {
   const { username, email, password } = req.body;
 
