@@ -1,9 +1,10 @@
 const midtransClient = require("midtrans-client");
 const express = require("express");
 const router = express.Router();
+const db = require("../db");
 // Midtrans Configuration
 const midtrans = new midtransClient.Snap({
-  isProduction: false, // Ubah ke `true` untuk production
+  isProduction: true, // Ubah ke `true` untuk production
   serverKey: process.env.MIDTRANS_SERVER_KEY,
   clientKey: process.env.MIDTRANS_CLIENT_KEY,
 });
